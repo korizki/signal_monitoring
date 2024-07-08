@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MapView from "react-native-maps";
 import { TextStyled } from "../config/StyledComponent";
 
@@ -13,7 +13,7 @@ export default function MonitoringComponent() {
                latitudeDelta: 0.5,
                longitudeDelta: 0.5
             }}
-            minZoomLevel={14}
+            // minZoomLevel={14}
             showsUserLocation={true}
          />
          <TextStyled className="absolute top-[0]">Halo</TextStyled>

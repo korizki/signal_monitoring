@@ -5,7 +5,7 @@ export default function HomeComponent() {
    return (
       <ViewStyled className="bg-gray-100 flex-1">
          <StatusBar style="dark" />
-         <TextStyled className="text-[#387ADF]">Hello in Home</TextStyled>
+         <TextStyled className="text-[crimo]">Hello in Home</TextStyled>
       </ViewStyled>
    )
 }
