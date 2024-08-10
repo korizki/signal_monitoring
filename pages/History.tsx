@@ -48,7 +48,6 @@ let sampleData = [
 
 export default function HistoryScreen() {
    const [keyword, setKeyword] = useState('')
-
    const filteredData = useMemo(() => {
       return sampleData.filter(raw => raw.cn.toLowerCase().includes(keyword.toLowerCase()))
    }, [sampleData, keyword])

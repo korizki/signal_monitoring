@@ -19,7 +19,7 @@ function App() {
         <Tab.Screen
           name="Home"
           component={HomeComponent}
-
+          options={{ headerShown: false }}
         />
         <Tab.Screen
           name="History"

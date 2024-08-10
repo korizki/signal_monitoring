@@ -1,4 +1,4 @@
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native"
+import { Button, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native"
 // @ts-ignore
 import illustop from "../assets/analyze-top.png"
 // @ts-ignore
@@ -6,13 +6,22 @@ import illusinfo from "../assets/infostatus.png"
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState } from "react"
 import ModalSelection from "../components/ModalSelection"
-import DateTimePicker from "react-native-ui-datepicker"
-import dayjs from 'dayjs';
+import InputSelection from "../components/InputSelection"
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 export default function DeviceComponent() {
    const [showShift, setShowShift] = useState<boolean>(false)
    const [selectedShift, setSelectedShift] = useState<number>(0)
-   const [date, setDate] = useState<any>(dayjs())
+   const [date, setDate] = useState<any>(new Date())
+
+   function showModalDate() {
+      DateTimePickerAndroid.open({
+         value: date,
+         onChange: (event, date) => setDate(date),
+         mode: 'date',
+         is24Hour: true,
+      })
+   }
 
    return (
       <ScrollView className="bg-white flex-1">
@@ -31,28 +40,20 @@ export default function DeviceComponent() {
             >
                <Text className="text-defaultBlack font-semibold text-[20px]">Analisa Kualitas Sinyal</Text>
                <Text className="text-[#777] my-[2px]">Pilih Tanggal dan Shift</Text>
-               <View className="my-[8px] flex mt-[16px]">
-                  <View className="">
-                     <DateTimePicker
-                        mode="single"
-                        date={date}
-                        selectedItemColor="#D80032"
-                        onChange={(params) => setDate(params.date)}
+               <View className="my-[8px] flex mt-[16px] mb-[24px]">
+                  <View className="mb-[16px]">
+                     <InputSelection
+                        pressAction={showModalDate}
+                        placeholder={"Pilih Tanggal"}
+                        value={date.toLocaleDateString('fr-CA')}
                      />
                   </View>
-                  <View className="translate-y-[-24px]">
-                     <TouchableOpacity
-                        onPress={() => setShowShift(!showShift)}
-                        activeOpacity={0.6}
-                        className="p-[14px] border border-[#efefef] bg-[#f8f8f8] rounded-[6px] flex-row justify-between items-center"
-                     >
-                        <Text className="text-defaultBlack text-[16px]">{selectedShift ? `Shift ${selectedShift}` : 'Pilih Shift'} </Text>
-                        <Ionicons
-                           name="chevron-down"
-                           size={20}
-                           color={"#999"}
-                        />
-                     </TouchableOpacity>
+                  <View className="">
+                     <InputSelection
+                        pressAction={() => setShowShift(!showShift)}
+                        placeholder="Pilih Shift"
+                        value={selectedShift ? `Shift ${selectedShift}` : null}
+                     />
                      <TouchableOpacity
                         className="p-[14px] rounded-[6px] mt-[20px] bg-defaultRed items-center flex-row justify-center"
                         activeOpacity={0.8}
