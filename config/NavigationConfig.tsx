@@ -8,8 +8,6 @@ export const configureNavigation = ({ route }) => {
             iconName = 'home'
          } else if (route.name == 'Analyze') {
             iconName = 'pie-chart'
-         } else if (route.name == 'Monitoring') {
-            iconName = 'map'
          } else if (route.name == 'History') {
             iconName = 'list'
          }

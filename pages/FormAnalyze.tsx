@@ -9,7 +9,7 @@ import ModalSelection from "../components/ModalSelection"
 import InputSelection from "../components/InputSelection"
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
-export default function DeviceComponent() {
+export default function FormAnalyze({ navigation }: any) {
    const [showShift, setShowShift] = useState<boolean>(false)
    const [selectedShift, setSelectedShift] = useState<number>(0)
    const [date, setDate] = useState<any>(new Date())
@@ -20,6 +20,12 @@ export default function DeviceComponent() {
          onChange: (event, date) => setDate(date),
          mode: 'date',
          is24Hour: true,
+      })
+   }
+   function navigateToResult() {
+      navigation.navigate('Result', {
+         selectedShift,
+         date: date.toLocaleDateString('fr-CA')
       })
    }
 
@@ -55,10 +61,11 @@ export default function DeviceComponent() {
                         value={selectedShift ? `Shift ${selectedShift}` : null}
                      />
                      <TouchableOpacity
-                        className="p-[14px] rounded-[6px] mt-[20px] bg-defaultRed items-center flex-row justify-center"
+                        className="p-[8px] rounded-[6px] mt-[20px] bg-defaultRed items-center flex-row justify-center"
                         activeOpacity={0.8}
+                        onPress={navigateToResult}
                      >
-                        <Ionicons name="send" size={20} color={"white"} />
+                        <Ionicons name="map-search" size={28} color={"white"} />
                         <Text className="text-white text-[16px] ml-[12px]">
                            Periksa
                         </Text>
@@ -70,7 +77,6 @@ export default function DeviceComponent() {
          <TouchableOpacity
             className="mx-[16px] bg-white mb-[24px] pt-[12px] pl-[16px] overflow-hidden rounded-[8px] h-[150px] relative bg-orange-50 border border-orange-100"
             activeOpacity={1}
-            // style={{ shadowColor: '#FB8B24' }}
             onPress={() => false}
          >
             <View className="z-[10]">

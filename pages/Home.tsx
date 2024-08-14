@@ -10,7 +10,7 @@ export default function HomeComponent({ navigation }) {
       <ViewStyled className="bg-white flex-1">
          <StatusBar style="auto" />
          <View className="p-[20] pt-[50] pb-[8]">
-            <Text className="text-[crimson] text-[22px]">Hai, <Text className="font-[500]">ICT Technician</Text></Text>
+            <Text className="text-[crimson] text-[22px]">Hai, <Text className="font-[500]">ICT Technicrian</Text></Text>
             <Text className="mt-[4] text-[#666]">Silahkan pilih menu yang tersedia untuk membantumu.</Text>
          </View>
          <View className="p-[20]" >
