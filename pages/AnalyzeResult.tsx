@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
 import HeaderInformation from "../components/analyze_result/HeaderInformation";
 import ModalLoading from "../components/LoadingModal";
 import SummaryContent, { TDSignalHistory } from "../components/analyze_result/SummaryContent";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function AnalyzeResult({ route, navigation }: any) {
-   const { selectedShift, date } = route.params
+   const { selectedShift, date, selectedUnit } = route.params
    let startTime = selectedShift == 1 ? '06:00' : '18:00'
    let endTime = selectedShift == 1 ? '18:00' : '06:00'
+   let codeName = selectedUnit ?? 'C77009'
    let nextDate = new Date(new Date(date).getTime() + (1000 * 60 * 60 * 24)).toLocaleDateString('fr-CA')
-   const codeName = 'C77010'
    const [listData, setListData] = useState([])
    const [loading, setLoading] = useState(false)
 
@@ -30,6 +29,7 @@ export default function AnalyzeResult({ route, navigation }: any) {
       }
       setLoading(false)
    }
+
    function navigateToMap(listData: TDSignalHistory[]) {
       navigation.push('MapResult', {
          listData
@@ -49,7 +49,7 @@ export default function AnalyzeResult({ route, navigation }: any) {
                selectedShift={selectedShift}
                total={listData.length ?? 0}
             />
-            <SummaryContent data={listData} />
+            <SummaryContent data={listData} shift={selectedShift} cn={codeName} date={date} />
          </ScrollView>
          <View className="p-[20px] bg-[#fafdff]">
             <TouchableOpacity

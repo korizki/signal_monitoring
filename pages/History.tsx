@@ -1,61 +1,62 @@
 // @ts-ignore
-import { useMemo, useState } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useEffect, useMemo, useState } from 'react'
+import { FlatList, Alert, Pressable, RefreshControl, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-let sampleData = [
-   {
-      cn: 'HD78302',
-      total: 3121,
-      date: '2024-07-01',
-      shift: 1,
-      summary: 'Good',
-      createdAt: '2024-06-01 08:13:12'
-   },
-   {
-      cn: 'HD78310',
-      total: 2344,
-      date: '2024-07-01',
-      shift: 2,
-      summary: 'Good',
-      createdAt: '2024-06-01 08:13:12'
-   },
-   {
-      cn: 'HD78308',
-      total: 2977,
-      date: '2024-07-02',
-      shift: 1,
-      summary: 'Good',
-      createdAt: '2024-06-01 08:13:12'
-   },
-   {
-      cn: 'HD78308',
-      total: 2977,
-      date: '2024-07-02',
-      shift: 1,
-      summary: 'Good',
-      createdAt: '2024-06-01 08:13:12'
-   },
-   {
-      cn: 'HD78308',
-      total: 2977,
-      date: '2024-07-02',
-      shift: 1,
-      summary: 'Good',
-      createdAt: '2024-06-01 08:13:12'
-   },
-]
-
-export default function HistoryScreen() {
+export default function HistoryScreen({ navigation }) {
    const [keyword, setKeyword] = useState('')
+   const [sampleData, setSampleData] = useState([])
+   // data difilter berdasarkan keyword dan sorting waktu terbaru
    const filteredData = useMemo(() => {
       return sampleData.filter(raw => raw.cn.toLowerCase().includes(keyword.toLowerCase()))
+         .sort((a, b) => new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1)
    }, [sampleData, keyword])
+
+   // action update data
+   async function handleDelete(filtered) {
+      await AsyncStorage.setItem('history', JSON.stringify(filtered))
+      fetchDataHistory()
+   }
+   // delete data history
+   async function deleteHistory(cn: string, shift: string, date: string) {
+      let filtered = sampleData.filter(exist => exist.cn != cn || exist.shift != shift || exist.date != date)
+      // showing confirm
+      Alert.alert('Konfirmasi Hapus', 'Anda yakin ingin menghapus data history ?', [
+         { text: 'Batal', style: 'cancel' },
+         {
+            text: 'Ya', onPress: () => {
+               const action = new Promise((resolve, reject) => {
+                  handleDelete(filtered)
+                  resolve(action)
+               })
+            }
+         },
+      ])
+   }
+
+   // jump to analyze result
+   async function reAnalyzeSignal(selectedShift: string, selectedUnit: string, date: string) {
+      navigation.navigate('Result', {
+         selectedShift,
+         selectedUnit,
+         date
+      })
+   }
+
+   // get data history from local storage
+   async function fetchDataHistory() {
+      const value = await AsyncStorage.getItem('history')
+      const parsedHistory = JSON.parse(value)
+      setSampleData(parsedHistory)
+   }
+   // fetch data from local storage on first load
+   useEffect(() => {
+      fetchDataHistory()
+   }, [navigation.isFocused()])
+
    return (
       <View className="pt-[12px] bg-white flex-1 pb-[0]">
-         <View>
-
-         </View>
          <View className="px-[16px]">
             <View className="flex-row justify-between items-center border border-[0.7px] border-[#eee] bg-white rounded-[8px] p-[8] pl-[4] pr-[8] mb-[12px]">
                <TextInput
@@ -72,15 +73,16 @@ export default function HistoryScreen() {
          <FlatList
             data={filteredData}
             showsVerticalScrollIndicator={false}
+            refreshControl={<RefreshControl refreshing={false} onRefresh={fetchDataHistory} />}
             renderItem={(data) => (
-               <CardData data={data} />
+               <CardData data={data} deleteAction={deleteHistory} checkDetail={reAnalyzeSignal} />
             )}
          />
       </View>
    )
 }
 
-const CardData = ({ data }) => {
+const CardData = ({ data, deleteAction, checkDetail }) => {
    const { cn, total, date, shift, summary, createdAt } = data.item
    return (
       <View
@@ -108,11 +110,11 @@ const CardData = ({ data }) => {
             <TouchableOpacity
                className="bg-defaultBlue p-[12px] rounded-[6px] flex-1"
                activeOpacity={0.8}
+               onPress={() => checkDetail(shift, cn, date)}
             >
                <Text className="text-white text-center text-[16px]">Detail</Text>
             </TouchableOpacity>
-            <MiniButton icon="map-marker-radius" pressAction={() => false} />
-            <MiniButton icon="delete" pressAction={() => false} />
+            <MiniButton icon="delete" pressAction={() => deleteAction(cn, shift, date)} />
          </View>
       </View>
    )
@@ -121,7 +123,7 @@ const CardData = ({ data }) => {
 const MiniButton = ({ icon, pressAction }: TEMiniButton) => {
    return (
       <Pressable
-         className="bg-[#f8f8f8] mt-[13px] ml-[12px] border border-[#eee] border-[0] p-[8px] rounded-[6px]"
+         className="bg-[#f8f8f8] mt-[13px] ml-[12px] border border-[#eee] border-[0] p-[12px] rounded-[6px]"
          onPress={pressAction}
       >
          <Text className="text-slate-500 w-[24px]">

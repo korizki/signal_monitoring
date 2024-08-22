@@ -4,17 +4,23 @@ import illustop from "../assets/analyze-top.png"
 // @ts-ignore
 import illusinfo from "../assets/infostatus.png"
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import * as _ from 'lodash'
 import ModalSelection from "../components/ModalSelection"
 import InputSelection from "../components/InputSelection"
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ModalSignalCategory from "../components/ModalSignalCategory"
+import ModalLoading from "../components/LoadingModal"
 
 export default function FormAnalyze({ navigation }: any) {
    const [showShift, setShowShift] = useState<boolean>(false)
+   const [showLoading, setShowLoading] = useState(false)
    const [selectedShift, setSelectedShift] = useState<number>(0)
    const [showIndicator, setShowIndicator] = useState(false)
    const [date, setDate] = useState<any>(new Date())
+   const [listUnit, setListUnit] = useState<any[]>([])
+   const [showListUnit, setShowListUnit] = useState(false)
+   const [selectedUnit, setSelectedUnit] = useState('')
 
    function showModalDate() {
       DateTimePickerAndroid.open({
@@ -24,16 +30,38 @@ export default function FormAnalyze({ navigation }: any) {
          is24Hour: true,
       })
    }
+
+   async function fetchingListUnit() {
+      setShowLoading(true)
+      try {
+         const action = await fetch(`https://api42.ppa-ba.net/hpr/v1/production/device/location-check-units`)
+         const response = await action.json()
+         if (response.code == 200) {
+            let listUnit = _.map(response.data.filter(unit => unit.type == 'HD'), 'cn')
+            setListUnit(listUnit.map(singleUnit => ({ label: singleUnit, value: singleUnit })))
+         }
+      } catch (err) {
+         console.error(err)
+      }
+      setShowLoading(false)
+   }
+
    function navigateToResult() {
       navigation.navigate('Result', {
          selectedShift,
+         selectedUnit,
          date: date.toLocaleDateString('fr-CA')
       })
    }
 
+   useEffect(() => {
+      fetchingListUnit()
+   }, [])
+
    return (
       <ScrollView className="bg-white flex-1">
          <StatusBar backgroundColor={'#dfdfdf'} />
+         <ModalLoading show={showLoading} />
          <View className="py-[12px] pb-[52px] bg-[#dfdfdf]">
             <Image
                source={illustop}
@@ -49,18 +77,23 @@ export default function FormAnalyze({ navigation }: any) {
                <Text className="text-defaultBlack font-semibold text-[20px]">Analisa Kualitas Sinyal</Text>
                <Text className="text-[#777] my-[2px]">Pilih Tanggal dan Shift</Text>
                <View className="my-[8px] flex mt-[16px] mb-[24px]">
-                  <View className="mb-[16px]">
+                  <View>
                      <InputSelection
                         pressAction={showModalDate}
                         placeholder={"Pilih Tanggal"}
                         value={date.toLocaleDateString('fr-CA')}
                      />
                   </View>
-                  <View className="">
+                  <View>
                      <InputSelection
                         pressAction={() => setShowShift(!showShift)}
                         placeholder="Pilih Shift"
                         value={selectedShift ? `Shift ${selectedShift}` : null}
+                     />
+                     <InputSelection
+                        pressAction={() => setShowListUnit(!showListUnit)}
+                        placeholder="Pilih Unit"
+                        value={selectedUnit ? `${selectedUnit}` : null}
                      />
                      <TouchableOpacity
                         className="p-[8px] rounded-[6px] mt-[20px] bg-defaultRed items-center flex-row justify-center"
@@ -98,6 +131,13 @@ export default function FormAnalyze({ navigation }: any) {
                { label: `Shift 1`, value: 1 },
                { label: `Shift 2`, value: 2 },
             ]}
+         />
+         <ModalSelection
+            visible={showListUnit}
+            close={() => setShowListUnit(false)}
+            select={setSelectedUnit}
+            selected={selectedUnit}
+            list={listUnit}
          />
          <ModalSignalCategory show={showIndicator} close={() => setShowIndicator(false)} />
       </ScrollView>

@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function ModalSignalCategory({ show, close }: TEModalSignalCategory) {
+export default function ModalSignalCategory({ show, close }: Readonly<TEModalSignalCategory>) {
    return (
       <Modal
          transparent={true}

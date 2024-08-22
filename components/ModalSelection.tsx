@@ -2,7 +2,7 @@ import { SetStateAction, useEffect } from "react";
 import { FlatList, Modal, Text, TouchableOpacity, View } from "react-native";
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-export default function ModalSelection({ visible, close, select, list, selected }: Readonly<TEModalSelect>) {
+const ModalSelection = ({ visible, close, select, list, selected }: Readonly<TEModalSelect>) => {
    useEffect(() => {
       setTimeout(() => close(), 300)
    }, [selected])
@@ -42,6 +42,8 @@ export default function ModalSelection({ visible, close, select, list, selected 
       </Modal>
    )
 }
+
+export default ModalSelection
 
 type TEModalSelect = {
    visible: boolean;

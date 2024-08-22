@@ -6,7 +6,7 @@ export default function InputSelection({ pressAction, placeholder, value }) {
       <TouchableOpacity
          onPress={pressAction}
          activeOpacity={0.6}
-         className="p-[14px] border border-[#efefef] bg-[#f8f8f8] rounded-[6px] flex-row justify-between items-center"
+         className="p-[14px] border border-[#efefef] bg-[#f8f8f8] rounded-[6px] flex-row justify-between items-center mt-[16px]"
       >
          <Text className="text-defaultBlack text-[16px]">{value || placeholder} </Text>
          <Ionicons
