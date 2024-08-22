@@ -7,19 +7,16 @@ const sgood = require('../assets/sgood.png')
 const sfair = require('../assets/sfair.png')
 const sbad = require('../assets/sbad.png')
 import * as Location from 'expo-location'
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function MonitoringComponent({ route, navigation }) {
    const { listData }: TDListCoordinate = route.params
-   const [location, setLocation] = useState(null)
    async function gettingPermission() {
       try {
          let { status } = await Location.requestForegroundPermissionsAsync()
          if (status !== 'granted') {
             return false
          }
-         let location = await Location.getCurrentPositionAsync({});
-         setLocation(location);
       } catch (err) {
          console.error('Something wrong on getting location permission')
       }
@@ -31,7 +28,7 @@ export default function MonitoringComponent({ route, navigation }) {
       <View style={StyleSheet.absoluteFill}>
          <StatusBar backgroundColor="white" hidden={false} showHideTransition="slide" barStyle="dark-content" />
          <MapView
-            style={StyleSheet.absoluteFill}
+            style={StyleSheet.absoluteFillObject}
             mapPadding={{ top: 24, right: 0, left: 0, bottom: 0 }}
             initialRegion={{
                latitude: -3.74340,
@@ -39,6 +36,7 @@ export default function MonitoringComponent({ route, navigation }) {
                latitudeDelta: 0.05,
                longitudeDelta: 0.05,
             }}
+            provider="google"
             showsUserLocation={true}
             showsMyLocationButton={true}
          >

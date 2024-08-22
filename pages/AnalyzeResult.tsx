@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import HeaderInformation from "../components/analyze_result/HeaderInformation";
 import ModalLoading from "../components/LoadingModal";
 import SummaryContent, { TDSignalHistory } from "../components/analyze_result/SummaryContent";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native";
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function AnalyzeResult({ route, navigation }: any) {

@@ -13,8 +13,8 @@ const HeaderInformation = ({ codeName, date, selectedShift, total }) => {
                <Text className="pb-[12px]">record</Text>
             </View>
             <Text className="text-[24px] font-[500] mt-[8px]">HD - {codeName}</Text>
-            <View className="bg-white p-[2px] mt-[8px] rounded-[20px] border flex-row gap-x-[8px] border-[#eee] items-center w-[180px]">
-               <Text className="px-[8px]">{date}</Text>
+            <View className="bg-[#fafafa] p-[3px] py-[4px] mt-[8px] rounded-[32px] border flex-row gap-x-[8px] border-[#eee] border-[0.5px] items-center w-[180px]">
+               <Text className="px-[8px] text-[#777]">{date}</Text>
                <View className={`${selectedShift == 1 ? 'bg-orange-400' : 'bg-slate-700'} p-[10px] flex-1 px-[8px] rounded-[24px]`}>
                   <Text className="text-white text-center">Shift {selectedShift}</Text>
                </View>

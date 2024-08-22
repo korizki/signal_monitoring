@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AnalyzeResult from './pages/AnalyzeResult';
 import FormAnalyze from './pages/FormAnalyze';
 import MonitoringComponent from './pages/Monitoring';
+import ModalSignalCategory from './components/ModalSignalCategory';
 
 function App() {
   return (
@@ -25,6 +26,11 @@ function App() {
           name="MapResult"
           component={MonitoringComponent}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Category"
+          component={ModalSignalCategory}
+          options={{ presentation: 'modal', headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

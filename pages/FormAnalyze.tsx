@@ -1,4 +1,4 @@
-import { Button, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native"
+import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native"
 // @ts-ignore
 import illustop from "../assets/analyze-top.png"
 // @ts-ignore
@@ -8,10 +8,12 @@ import { useState } from "react"
 import ModalSelection from "../components/ModalSelection"
 import InputSelection from "../components/InputSelection"
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import ModalSignalCategory from "../components/ModalSignalCategory"
 
 export default function FormAnalyze({ navigation }: any) {
    const [showShift, setShowShift] = useState<boolean>(false)
    const [selectedShift, setSelectedShift] = useState<number>(0)
+   const [showIndicator, setShowIndicator] = useState(false)
    const [date, setDate] = useState<any>(new Date())
 
    function showModalDate() {
@@ -77,7 +79,7 @@ export default function FormAnalyze({ navigation }: any) {
          <TouchableOpacity
             className="mx-[16px] bg-white mb-[24px] pt-[12px] pl-[16px] overflow-hidden rounded-[8px] h-[150px] relative bg-orange-50 border border-orange-100"
             activeOpacity={1}
-            onPress={() => false}
+            onPress={() => setShowIndicator(true)}
          >
             <View className="z-[10]">
                <Text className="text-[20px] text-defaultBlack font-semibold ">Standar Parameter</Text>
@@ -97,6 +99,7 @@ export default function FormAnalyze({ navigation }: any) {
                { label: `Shift 2`, value: 2 },
             ]}
          />
+         <ModalSignalCategory show={showIndicator} close={() => setShowIndicator(false)} />
       </ScrollView>
    )
 }

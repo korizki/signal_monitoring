@@ -30,7 +30,7 @@ export default function SummaryContent({ data }: Readonly<TESummary>) {
    }, [data])
 
    return (
-      <View className="px-[20] py-[10] gap-y-[24px] translate-y-[-20px] min-h-[50%]">
+      <View className="px-[20] py-[10] gap-y-[16px] translate-y-[-20px] min-h-[50%]">
          {
             groupedData.filter(quality => quality.totalDataByCategory).map(categorizedData => (
                <TouchableOpacity

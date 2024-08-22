@@ -4,8 +4,11 @@ const illusa = require('../assets/home_a.png')
 const illusb = require('../assets/home_b.png')
 const illusc = require("../assets/infostatus.png")
 import { StatusBar } from "expo-status-bar"
+import ModalSignalCategory from "../components/ModalSignalCategory"
+import { useState } from "react"
 
 export default function HomeComponent({ navigation }) {
+   const [showIndicator, setShowIndicator] = useState(false)
    return (
       <ViewStyled className="bg-white flex-1">
          <StatusBar style="auto" />
@@ -30,9 +33,10 @@ export default function HomeComponent({ navigation }) {
                imageSource={illusc}
                title="Standar Parameter"
                desc="Pahami nilai standar dalam menentukan kualitas jaringan."
-               action={() => false}
+               action={() => setShowIndicator(true)}
             />
          </View>
+         <ModalSignalCategory show={showIndicator} close={() => setShowIndicator(false)} />
       </ViewStyled>
    )
 }

@@ -9,7 +9,7 @@ export const configureNavigation = ({ route }) => {
          } else if (route.name == 'Analyze') {
             iconName = 'pie-chart'
          } else if (route.name == 'History') {
-            iconName = 'list'
+            iconName = 'history'
          }
          return <Ionicons name={iconName} size={size} color={color} />
       },
